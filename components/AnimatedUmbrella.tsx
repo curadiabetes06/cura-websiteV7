@@ -24,9 +24,10 @@ function SegmentHighlight({
   smoothX: MotionValue<number>;
   smoothY: MotionValue<number>;
 }) {
-  const segmentHighlight = useTransform<[number, number], number>(
+  const segmentHighlight = useTransform(
     [smoothX, smoothY],
-    ([mx, my]: [number, number]) => {
+    (values) => {
+      const [mx, my] = values as [number, number];
       const segNormX = segmentCenterX / 200;
       const segNormY = segmentCenterY / 200;
       const distance = Math.sqrt(
@@ -66,9 +67,10 @@ function GlowPoint({
   smoothX: MotionValue<number>;
   smoothY: MotionValue<number>;
 }) {
-  const glowOpacity = useTransform<[number, number], number>(
+  const glowOpacity = useTransform(
     [smoothX, smoothY],
-    ([mx, my]: [number, number]) => {
+    (values) => {
+      const [mx, my] = values as [number, number];
       const pointNormX = x / 200;
       const pointNormY = y / 200;
       const distance = Math.sqrt(
@@ -151,9 +153,10 @@ export default function AnimatedUmbrella({
   const lightY = useTransform(smoothY, (y) => 100 + (y - 0.5) * 50);
   
   // Calculate intensity based on distance from center
-  const lightIntensity = useTransform<[number, number], number>(
+  const lightIntensity = useTransform(
     [smoothX, smoothY],
-    ([x, y]: [number, number]) => {
+    (values) => {
+      const [x, y] = values as [number, number];
       const distance = Math.sqrt(Math.pow(x - 0.5, 2) + Math.pow(y - 0.5, 2));
       return Math.min(1, distance * 2.5);
     }
@@ -208,7 +211,7 @@ export default function AnimatedUmbrella({
         className="relative"
         style={{ overflow: 'visible' }}
       >
-        {/* Background glow layer */}
+        {/* Background glow */}
         <motion.circle
           cx={centerX}
           cy={centerY}
