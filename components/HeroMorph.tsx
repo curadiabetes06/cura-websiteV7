@@ -45,7 +45,9 @@ export default function HeroMorph() {
     }
 
     function animate() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      if (!ctx || !canvas) return;
+ctx.clearRect(0, 0, canvas.width, canvas.height);
+
       time += 0.01;
 
       // Draw morphing gradient blobs
