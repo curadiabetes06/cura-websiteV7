@@ -42,13 +42,50 @@ export default function PatientPortalPage() {
     });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    // Don't prevent default - let form submit naturally to iframe
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
     setIsSubmitting(true);
     setSubmitStatus('idle');
     
-    // Show success message after form submits (form submits to hidden iframe)
-    setTimeout(() => {
+    try {
+      // Send data to Make.com webhook
+      const webhookUrl = 'https://hook.us2.make.com/nugvrsp62ah08vivz9xumuni4y3i85kb';
+      
+      await fetch(webhookUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: formData.email,
+          fullName: formData.fullName,
+          age: formData.age,
+          phone: formData.phone,
+          relationship: formData.relationship === 'patient' 
+            ? (locale === 'ar' ? 'المريض' : 'Patient') 
+            : (locale === 'ar' ? 'أحد أفراد العائلة' : 'Family Member'),
+          diabetesType: formData.diabetesType,
+          dateOfDiagnosis: formData.dateOfDiagnosis,
+          currentMedications: formData.currentMedications,
+          otherInfo: formData.otherInfo,
+        }),
+      });
+
+      // Also submit to Google Apps Script (if needed for backup)
+      const form = e.target as HTMLFormElement;
+      const scriptUrl = 'https://script.google.com/macros/s/AKfycbzkf3CwFJ_A4IZ3DxksKQjebRKbpcInxwdNkwSXAZG_sw3S-_McM8e3nOBmfSot0Mjb/exec';
+      
+      // Submit to Google Apps Script via hidden iframe
+      const formDataToSubmit = new FormData(form);
+      fetch(scriptUrl, {
+        method: 'POST',
+        body: formDataToSubmit,
+        mode: 'no-cors',
+      }).catch(() => {
+        // Ignore errors for Google Apps Script submission
+      });
+      
+      // Show success message
       setSubmitStatus('success');
       setIsSubmitting(false);
       
@@ -67,7 +104,11 @@ export default function PatientPortalPage() {
         });
         setSubmitStatus('idle');
       }, 3000);
-    }, 1000);
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      setSubmitStatus('error');
+      setIsSubmitting(false);
+    }
   };
 
   return (
