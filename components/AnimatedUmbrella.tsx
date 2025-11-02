@@ -24,19 +24,19 @@ function SegmentHighlight({
   smoothX: MotionValue<number>;
   smoothY: MotionValue<number>;
 }) {
-  const segmentHighlight = useTransform(
+  const segmentHighlight = useTransform<[number, number], number>(
     [smoothX, smoothY],
-    (values) => {
-      const [mx, my] = values as [number, number];
+    ([mx, my]) => {
       const segNormX = segmentCenterX / 200;
       const segNormY = segmentCenterY / 200;
       const distance = Math.sqrt(
-        Math.pow(mx - segNormX, 2) + 
-        Math.pow(my - segNormY, 2)
+        Math.pow(Number(mx) - segNormX, 2) +
+        Math.pow(Number(my) - segNormY, 2)
       );
       return Math.max(0, 0.8 - distance * 4);
     }
-  );
+  );  
+      
 
   return (
     <motion.circle
@@ -67,19 +67,19 @@ function GlowPoint({
   smoothX: MotionValue<number>;
   smoothY: MotionValue<number>;
 }) {
-  const glowOpacity = useTransform(
+  const glowOpacity = useTransform<[number, number], number>(
     [smoothX, smoothY],
-    (values) => {
-      const [mx, my] = values as [number, number];
+    ([mx, my]) => {
       const pointNormX = x / 200;
       const pointNormY = y / 200;
       const distance = Math.sqrt(
-        Math.pow(mx - pointNormX, 2) + 
-        Math.pow(my - pointNormY, 2)
+        Math.pow(Number(mx) - pointNormX, 2) +
+        Math.pow(Number(my) - pointNormY, 2)
       );
       return Math.max(0.3, 0.9 - distance * 2.5);
     }
   );
+  
 
   return (
     <motion.circle
