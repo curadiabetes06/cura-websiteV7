@@ -1,0 +1,98 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 255 255 255;
+    --foreground: 4 77 130;
+  }
+
+  .dark {
+    --background: 15 23 42;
+    --foreground: 248 250 252;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-50;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+
+  /* Remove any custom cursor styles, but preserve UI elements */
+  html, body {
+    cursor: default !important;
+  }
+
+  /* Allow normal pointer on interactive elements */
+  a, button, [role="button"], input[type="button"], input[type="submit"], [onclick], [data-theme-toggle] {
+    cursor: pointer !important;
+  }
+
+  /* Text input cursors */
+  input[type="text"], input[type="email"], input[type="password"], textarea, [contenteditable] {
+    cursor: text !important;
+  }
+  
+  /* Protect theme toggle - ensure it's always visible */
+  [data-theme-toggle],
+  [data-theme-toggle] *,
+  button[data-theme-toggle] {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+    cursor: pointer !important;
+  }
+  
+}
+
+/* Custom font faces will be added here when fonts are available */
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  
+  .rtl {
+    direction: rtl;
+  }
+  
+  .ltr {
+    direction: ltr;
+  }
+}
+
+/* Smooth animations */
+@layer components {
+  .animate-fade-in {
+    animation: fadeIn 0.8s ease-in-out;
+  }
+
+  .animate-slide-up {
+    animation: slideUp 0.8s ease-out;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes slideUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+

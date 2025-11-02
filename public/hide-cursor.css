@@ -1,0 +1,13 @@
+/* Simple approach: just hide the cursor, don't mess with content */
+
+/* Default cursor */
+* {
+  cursor: default !important;
+}
+
+/* Pointer for clickables */
+a, button, [role="button"], [data-theme-toggle], input[type="submit"] {
+  cursor: pointer !important;
+}
+
+
